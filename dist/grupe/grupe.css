@@ -1,0 +1,32 @@
+body {
+  font-family: Arial, Helvetica, sans-serif;
+  padding: 0;
+  margin: 0;
+  background-color: whitesmoke;
+  color: white;
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+}
+body .navbar {
+  background-color: darkslategray;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+body .navbar .title {
+  padding: 10px;
+}
+body .navbar .navlinks {
+  display: flex;
+  list-style: none;
+}
+body .navbar .navlinks a {
+  color: white;
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+  text-decoration: none;
+  padding: 10px;
+}
+body .navbar .navlinks a:hover {
+  color: lightsalmon;
+}
+
+/*# sourceMappingURL=grupe.css.map */
