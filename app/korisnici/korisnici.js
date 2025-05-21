@@ -1,5 +1,32 @@
 "use strict";
 
+function get() {
+  let urlParams = new URLSearchParams(window.location.search);
+  let id = urlParams.get("id");
+  if (!id) {
+    return;
+  }
+
+  fetch("api/grupe/" + id + "/korisnici")
+    .then((response) => {
+      if (!response.ok) {
+        throw new Error("Request failed. Status: " + response.status);
+      }
+      return response.json();
+    })
+    .then((korisnici) => renderKorisnici(korisnici))
+    .catch((error) => {
+      console.error("Error:", error.message);
+
+      let table = document.querySelector("#korisnici-table");
+      if (table) {
+        table.style.display = "none";
+      }
+
+      alert("Error occurred while loading the data. Please try again.");
+    });
+}
+
 function getKorisnici() {
   fetch("http://localhost:41322/api/korisnici")
     .then((response) => {
@@ -61,4 +88,9 @@ addBtn.addEventListener("click", function () {
   window.location.href = "korisniciForma.html";
 });
 
-document.addEventListener("DOMContentLoaded", getKorisnici);
+function inicijalizujKorisnike() {
+  getKorisnici();
+  get();
+}
+
+document.addEventListener("DOMContentLoaded", inicijalizujKorisnike);
