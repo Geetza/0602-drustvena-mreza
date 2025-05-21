@@ -29,57 +29,68 @@ body .navbar .navlinks a:hover {
   color: lightsalmon;
 }
 
-#grupe-container {
-  width: 100%;
-  height: 100vh;
+#grupe-form {
   display: flex;
   flex-direction: column;
-  justify-content: flex-start;
+  justify-content: center;
   align-items: center;
 }
-#grupe-container h2 {
+#grupe-form h2 {
   color: darkslategray;
   text-shadow: none;
   font-size: 32px;
   margin: 20px;
 }
-#grupe-container button {
+#grupe-form #form {
+  display: flex;
+  flex-direction: column;
+  width: 30%;
+  background-color: darkslategray;
+  padding: 10px;
+  border-radius: 10px;
+}
+#grupe-form #form label {
+  font-size: 20px;
+  padding: 10px;
+}
+#grupe-form #form span {
+  color: lightsalmon;
+  padding-left: 10px;
+  text-shadow: none;
+}
+#grupe-form #form input {
+  height: 30px;
+  margin: 10px;
+  border-radius: 3px;
+  width: 50%;
+  min-width: 150px;
+}
+#grupe-form #form input:focus {
+  background-color: gainsboro;
+}
+#grupe-form .actions {
+  display: flex;
+  flex-direction: row-reverse;
+  justify-content: space-around;
+  flex-wrap: wrap;
+  width: 20%;
+  margin-top: 40px;
+}
+#grupe-form .actions button {
   background-color: darkslategray;
   color: whitesmoke;
   text-shadow: none;
   font-size: 16px;
   padding: 5px;
-  margin: 20px;
+  margin: 10px;
   width: 150px;
   height: 40px;
-  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
   border-radius: 5px;
 }
-#grupe-container button:hover {
+#grupe-form .actions button:hover {
   background-color: lightsalmon;
   text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
   cursor: pointer;
 }
-#grupe-container #grupe-table {
-  background-color: darkslategray;
-  width: 60%;
-  border-collapse: collapse;
-  border-radius: 10px;
-  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
-}
-#grupe-container #grupe-table th {
-  color: whitesmoke;
-  background-color: rgba(255, 255, 255, 0.2);
-  text-align: start;
-  padding: 10px;
-  font-size: 24px;
-  border-bottom: 1px solid whitesmoke;
-}
-#grupe-container #grupe-table td {
-  padding: 10px;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.2);
-  border-right: 1px solid rgba(255, 255, 255, 0.2);
-  height: 40px;
-}
 
-/*# sourceMappingURL=grupe.css.map */
+/*# sourceMappingURL=grupeForma.css.map */

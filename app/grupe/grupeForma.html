@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dodaj ili izmeni grupu</title>
+    <link rel="stylesheet" href="../../dist/grupeForma/grupeForma.css">
+</head>
+
+<body>
+    <nav class="navbar">
+        <h1 class="title">Drustvena mreza</h1>
+        <ul class="navlinks">
+            <li><a href="../index.html">Home</a></li>
+            <li><a href="../korisnici/korisnici.html">Korisnici</a></li>
+            <li><a href="./grupe.html">Grupe</a></li>
+        </ul>
+    </nav>
+    <div id="grupe-form">
+        <h2>Dodaj novu ili izmeni postojeću grupu</h2>
+        <form id="form">
+            <label for="ime">Ime grupe:</label>
+            <input type="text" id="ime" name="ime" placeholder=" Ime grupe" />
+            <span id="imeError"></span>
+
+            <label for="datumOsnivanja">Datum osnivanja:</label>
+            <input type="date" id="datumOsnivanja" value="2000-01-01" name="datumOsnivanja" />
+            <span id="datumError"></span>
+
+        </form>
+        <div class="actions">
+            <button id="submitBtn">Submit</button>
+            <button id="cancelBtn">Cancel</button>
+        </div>
+    </div>
+    <script src="grupeForma.js"></script>
+</body>
+
+</html>
