@@ -78,6 +78,36 @@ function prikaziGrupe(data) {
         cell3.appendChild(deleteButton)
         newRow.append(cell3)
 
+        let cell4 = document.createElement('td')
+        let viewButton = document.createElement('button')
+        viewButton.textContent = 'Korisnici'
+        viewButton.addEventListener('click', function () {
+            fetch('http://localhost:41322/api/grupe/' + grupa['id'] + "/korisnici")
+                .then(response => {
+                    if (!response.ok) {
+                        const error = new Error('Request failed. Status: ' + response.status)
+                        error.response = response
+                        throw error
+                    }
+                    return response.json()
+                })
+                .then(data => {
+                    console.log(data)
+                    window.location.href = "../korisnici/korisnici.html?id=" + grupa["id"]
+                })
+                .catch(error => {
+                    console.error('Error:' + error.message)
+                    if (error.response && error.response.status === 404) {
+                        alert('Group does not exist!')
+                    } else {
+                        alert('An error occurred while creating data. Please try again.')
+                    }
+                })
+        })
+
+        cell4.appendChild(viewButton)
+        newRow.append(cell4)
+
         table.appendChild(newRow)
     });
 
