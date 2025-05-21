@@ -30,7 +30,6 @@ function renderKorisnici(data) {
 
     let cell1 = document.createElement("td");
     cell1.textContent = korisnik["korIme"];
-    newRow.appendChild(cell1);
 
     let cell2 = document.createElement("td");
 
@@ -40,10 +39,19 @@ function renderKorisnici(data) {
     const mesec = String(datum.getMonth() + 1).padStart(2, "0");
     const dan = String(datum.getDate()).padStart(2, "0");
     const formatiranDatum = `${godina}-${mesec}-${dan}`;
-
     cell2.textContent = formatiranDatum;
-    newRow.appendChild(cell2);
 
+    let cell3 = document.createElement("td");
+    let editBtn = document.createElement("button");
+    editBtn.textContent = "Izmeni";
+    editBtn.addEventListener("click", function () {
+      window.location.href = "korisniciForma.html?id=" + korisnik["id"];
+    });
+    cell3.appendChild(editBtn);
+
+    newRow.appendChild(cell1);
+    newRow.appendChild(cell2);
+    newRow.appendChild(cell3);
     table.appendChild(newRow);
   });
 }

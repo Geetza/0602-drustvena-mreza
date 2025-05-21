@@ -1,12 +1,50 @@
 "use strict";
 
-let cancelBtn = document.querySelector("#cancelBtn");
-cancelBtn.addEventListener("click", function () {
-  window.location.href = "korisnici.html";
-});
+function incijalizujFormu() {
+  let cancelBtn = document.querySelector("#cancelBtn");
+  cancelBtn.addEventListener("click", function () {
+    window.location.href = "korisnici.html";
+  });
 
-let submitBtn = document.querySelector("#submitBtn");
-submitBtn.addEventListener("click", function () {
+  let submitBtn = document.querySelector("#submitBtn");
+  submitBtn.addEventListener("click", obradiFormu);
+
+  get();
+}
+
+function get() {
+  let urlParams = new URLSearchParams(window.location.search);
+  const id = urlParams.get("id");
+  if (!id) {
+    return;
+  }
+
+  fetch("http://localhost:41322/api/korisnici/" + id)
+    .then((response) => {
+      if (!response.ok) {
+        const error = new Error("Request failed. Status: " + response.status);
+        error.response = response;
+        throw error;
+      }
+      return response.json();
+    })
+    .then((korisnik) => {
+      document.querySelector("#korIme").value = korisnik.korIme;
+      document.querySelector("#ime").value = korisnik.ime;
+      document.querySelector("#prezime").value = korisnik.prezime;
+      document.querySelector("#datumRodjenja").value = korisnik.datumRodjenja;
+    })
+    .catch((error) => {
+      console.error("Error:");
+      if (error.response && error.response === 404) {
+        alert("Korisnik ne postoji");
+      } else {
+        alert("Error occurred while loading the data. Please try again.");
+      }
+    });
+}
+
+function obradiFormu() {
   const form = document.querySelector("#form");
   const formData = new FormData(form);
 
@@ -56,8 +94,17 @@ submitBtn.addEventListener("click", function () {
     return;
   }
 
-  fetch("http://localhost:41322/api/korisnici", {
-    method: "POST",
+  let method = "POST";
+  let url = "http://localhost:41322/api/korisnici";
+  const urlParams = new URLSearchParams(window.location.search);
+  const id = urlParams.get("id");
+  if (id) {
+    method = "PUT";
+    url = "http://localhost:41322/api/korisnici/" + id;
+  }
+
+  fetch(url, {
+    method: method,
     headers: {
       "Content-type": "application/json",
     },
@@ -82,4 +129,6 @@ submitBtn.addEventListener("click", function () {
         alert("An error occurred while updating the data. Please try again.");
       }
     });
-});
+}
+
+addEventListener("DOMContentLoaded", incijalizujFormu);
