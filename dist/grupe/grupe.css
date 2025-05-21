@@ -81,5 +81,11 @@ body .navbar .navlinks a:hover {
   border-right: 1px solid rgba(255, 255, 255, 0.2);
   height: 40px;
 }
+#grupe-container #grupe-table td button {
+  background-color: rgba(255, 255, 255, 0.2);
+}
+#grupe-container #grupe-table td button:hover {
+  background-color: lightsalmon;
+}
 
 /*# sourceMappingURL=grupe.css.map */

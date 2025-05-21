@@ -1,46 +1,40 @@
 <!DOCTYPE html>
 <html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="../../dist/grupe/grupe.css" />
+    <title>Grupe</title>
+  </head>
 
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <link rel="stylesheet" href="../../dist/grupe/grupe.css" />
-  <title>Grupe</title>
-</head>
+  <body>
+    <nav class="navbar">
+      <h1 class="title">Drustvena mreza</h1>
+      <ul class="navlinks">
+        <li><a href="../index.html">Home</a></li>
+        <li><a href="../korisnici/korisnici.html">Korisnici</a></li>
+        <li><a href="grupe.html">Grupe</a></li>
+      </ul>
+    </nav>
 
-<body>
-  <nav class="navbar">
-    <h1 class="title">Drustvena mreza</h1>
-    <ul class="navlinks">
-      <li><a href="../index.html">Home</a></li>
-      <li><a href="../korisnici/korisnici.html">Korisnici</a></li>
-      <li><a href="grupe.html">Grupe</a></li>
-    </ul>
-  </nav>
+    <main id="main">
+      <div id="grupe-container">
+        <h2>Grupe</h2>
+        <table id="grupe-table">
+          <thead>
+            <tr>
+              <th>Ime</th>
+              <th>Datum Osnivanja</th>
+              <th>Obriši</th>
+              <th>Prikaži korisnike</th>
+            </tr>
+          </thead>
+          <tbody></tbody>
+        </table>
+        <button id="addGrupaBtn">Dodaj novu grupu</button>
+      </div>
+    </main>
 
-  <main id="main">
-    <div id="grupe-container">
-      <h1>Grupe</h1>
-      <table id="grupe-table">
-        <thead>
-          <tr>
-            <th>Ime</th>
-            <th>Datum Osnivanja</th>
-            <th>Obriši</th>
-            <th>Prikaži korisnike</th>
-          </tr>
-        </thead>
-        <tbody>
-
-        </tbody>
-      </table>
-      <button id="addGrupaBtn">Dodaj novu grupu</button>
-    </div>
-  </main>
-
-
-
-  <script src="grupe.js"></script>
-</body>
-
+    <script src="grupe.js"></script>
+  </body>
 </html>

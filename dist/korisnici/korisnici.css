@@ -29,21 +29,21 @@ body .navbar .navlinks a:hover {
   color: lightsalmon;
 }
 
-#korisnici-container {
+div {
   width: 100%;
-  height: 100vh;
+  height: 60vh;
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
   align-items: center;
 }
-#korisnici-container h2 {
+div h2 {
   color: darkslategray;
   text-shadow: none;
   font-size: 32px;
   margin: 20px;
 }
-#korisnici-container button {
+div button {
   background-color: darkslategray;
   color: whitesmoke;
   text-shadow: none;
@@ -55,19 +55,19 @@ body .navbar .navlinks a:hover {
   box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
   border-radius: 5px;
 }
-#korisnici-container button:hover {
+div button:hover {
   background-color: lightsalmon;
   text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
   cursor: pointer;
 }
-#korisnici-container #korisnici-table {
+div table {
   background-color: darkslategray;
   width: 60%;
   border-collapse: collapse;
   border-radius: 10px;
   box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
 }
-#korisnici-container #korisnici-table th {
+div table th {
   color: whitesmoke;
   background-color: rgba(255, 255, 255, 0.2);
   text-align: start;
@@ -75,16 +75,16 @@ body .navbar .navlinks a:hover {
   font-size: 24px;
   border-bottom: 1px solid whitesmoke;
 }
-#korisnici-container #korisnici-table td {
+div table td {
   padding: 10px;
   border-bottom: 1px solid rgba(255, 255, 255, 0.2);
   border-right: 1px solid rgba(255, 255, 255, 0.2);
   height: 40px;
 }
-#korisnici-container #korisnici-table td button {
+div table td button {
   background-color: rgba(255, 255, 255, 0.2);
 }
-#korisnici-container #korisnici-table td button:hover {
+div table td button:hover {
   background-color: lightsalmon;
 }
 

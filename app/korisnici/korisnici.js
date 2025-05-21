@@ -7,24 +7,24 @@ function get() {
     return;
   }
 
-  fetch("api/grupe/" + id + "/korisnici")
-    .then((response) => {
-      if (!response.ok) {
-        throw new Error("Request failed. Status: " + response.status);
-      }
-      return response.json();
-    })
-    .then((korisnici) => renderKorisnici(korisnici))
-    .catch((error) => {
-      console.error("Error:", error.message);
+  // fetch("api/grupe/" + id + "/korisnici")
+  //   .then((response) => {
+  //     if (!response.ok) {
+  //       throw new Error("Request failed. Status: " + response.status);
+  //     }
+  //     return response.json();
+  //   })
+  //   .then((korisnici) => renderKorisnici(korisnici))
+  //   .catch((error) => {
+  //     console.error("Error:", error.message);
 
-      let table = document.querySelector("#korisnici-table");
-      if (table) {
-        table.style.display = "none";
-      }
+  //     let table = document.querySelector("#korisnici-table");
+  //     if (table) {
+  //       table.style.display = "none";
+  //     }
 
-      alert("Error occurred while loading the data. Please try again.");
-    });
+  //     alert("Error occurred while loading the data. Please try again.");
+  //   });
 }
 
 function getKorisnici() {
@@ -93,4 +93,4 @@ function inicijalizujKorisnike() {
   get();
 }
 
-document.addEventListener("DOMContentLoaded", inicijalizujKorisnike);
+document.addEventListener("DOMContentLoaded", getKorisnici);
