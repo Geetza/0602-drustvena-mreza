@@ -1,1 +1,43 @@
 @import "./styles.scss";
+
+
+h1 {
+    justify-content: center;
+}
+
+#grupe-table {
+    padding: 1rem;
+
+
+
+
+    table {
+        width: 50%;
+        border-collapse: collapse;
+        margin-top: 1rem;
+
+        th,
+        td {
+            border: 1px solid #ddd;
+            padding: 0.5rem;
+            text-align: left;
+        }
+
+        th {
+            background-color: $color1;
+            color: white;
+        }
+
+        tr:hover {
+            background-color: #f1f1f1;
+        }
+    }
+
+}
+
+#grupe-container {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}

@@ -1,19 +1,36 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <link rel="stylesheet" href="../../dist/korisnici/korisnici.css" />
-    <title>Home</title>
-  </head>
-  <body>
-    <nav class="navbar">
-      <h1 class="title">Drustvena mreza</h1>
-      <ul class="navlinks">
-        <li><a href="../index.html">Home</a></li>
-        <li><a href="korisnici.html">Korisnici</a></li>
-        <li><a href="../grupe/grupe.html">Grupe</a></li>
-      </ul>
-    </nav>
-  </body>
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="stylesheet" href="../../dist/korisnici/korisnici.css" />
+  <title>Korisnici</title>
+</head>
+
+<body>
+  <nav class="navbar">
+    <h1 class="title">Drustvena mreza</h1>
+    <ul class="navlinks">
+      <li><a href="../index.html">Home</a></li>
+      <li><a href="korisnici.html">Korisnici</a></li>
+      <li><a href="../grupe/grupe.html">Grupe</a></li>
+    </ul>
+  </nav>
+
+  <div id="korisnici-container">
+    <h2>Korisnici</h2>
+    <table id="korisnici-table">
+      <thead id="korisnici-thead">
+        <tr>
+          <th>Korisnicko ime</th>
+          <th>Datum rodjenja</th>
+        </tr>
+      </thead>
+      <tbody id="korisnici-tbody"></tbody>
+    </table>
+  </div>
+  <script src="korisnici.js"></script>
+</body>
+
 </html>

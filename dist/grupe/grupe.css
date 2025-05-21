@@ -29,4 +29,37 @@ body .navbar .navlinks a:hover {
   color: lightsalmon;
 }
 
+h1 {
+  justify-content: center;
+}
+
+#grupe-table {
+  padding: 1rem;
+}
+#grupe-table table {
+  width: 50%;
+  border-collapse: collapse;
+  margin-top: 1rem;
+}
+#grupe-table table th,
+#grupe-table table td {
+  border: 1px solid #ddd;
+  padding: 0.5rem;
+  text-align: left;
+}
+#grupe-table table th {
+  background-color: whitesmoke;
+  color: white;
+}
+#grupe-table table tr:hover {
+  background-color: #f1f1f1;
+}
+
+#grupe-container {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
 /*# sourceMappingURL=grupe.css.map */
