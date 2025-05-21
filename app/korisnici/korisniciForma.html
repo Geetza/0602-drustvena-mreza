@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link
+      rel="stylesheet"
+      href="../../dist/korisniciForma/korisniciForma.css"
+    />
+    <title>Dodaj korisnika</title>
+  </head>
+  <body>
+    <nav class="navbar">
+      <h1 class="title">Drustvena mreza</h1>
+      <ul class="navlinks">
+        <li><a href="../index.html">Home</a></li>
+        <li><a href="./korisnici.html">Korisnici</a></li>
+        <li><a href="../grupe/grupe.html">Grupe</a></li>
+      </ul>
+    </nav>
+
+    <div id="korisnici-form">
+      <h2>Dodaj novog korisnika</h2>
+      <form id="form">
+        <label for="korIme">Korisnicko ime:</label>
+        <input
+          type="text"
+          id="korIme"
+          name="korIme"
+          placeholder=" Korisnicko ime"
+        />
+        <span id="korImeError"></span>
+        <br />
+
+        <label for="ime">Ime:</label>
+        <input type="text" id="ime" name="ime" placeholder=" Ime" />
+        <span id="imeError"></span>
+        <br />
+
+        <label for="prezime">Prezime:</label>
+        <input type="text" id="prezime" name="prezime" placeholder=" Prezime" />
+        <span id="prezimeError"></span>
+        <br />
+
+        <label for="datumRodjenja">Datum rodjenja:</label>
+        <input type="date" id="datumRodjenja" name="datumRodjenja" />
+        <span id="datumRodjenjaError"></span>
+        <br />
+      </form>
+      <div class="actions">
+        <button id="submitBtn">Submit</button>
+        <button id="cancelBtn">Cancel</button>
+      </div>
+    </div>
+    <script src="korisniciForma.js"></script>
+  </body>
+</html>

@@ -48,4 +48,9 @@ function renderKorisnici(data) {
   });
 }
 
+let addBtn = document.querySelector("#addBtn");
+addBtn.addEventListener("click", function () {
+  window.location.href = "korisniciForma.html";
+});
+
 document.addEventListener("DOMContentLoaded", getKorisnici);

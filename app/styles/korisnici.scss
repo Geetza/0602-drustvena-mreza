@@ -12,6 +12,26 @@
     color: $color2;
     text-shadow: none;
     font-size: $font-size-large;
+    margin: 20px;
+  }
+
+  button {
+    background-color: $color2;
+    color: $color1;
+    text-shadow: none;
+    font-size: $font-size-small;
+    padding: 5px;
+    margin: 20px;
+    width: 150px;
+    height: 40px;
+    box-shadow: $box-shadow;
+    border-radius: 5px;
+
+    &:hover {
+      background-color: $color3;
+      text-shadow: $text-shadow;
+      cursor: pointer;
+    }
   }
 
   #korisnici-table {
