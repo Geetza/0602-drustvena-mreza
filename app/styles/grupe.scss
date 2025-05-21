@@ -1,1 +1,60 @@
 @import "./styles.scss";
+
+#grupe-container {
+    width: 100%;
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: center;
+
+    h2 {
+        color: $color2;
+        text-shadow: none;
+        font-size: $font-size-large;
+        margin: 20px;
+    }
+
+    button {
+        background-color: $color2;
+        color: $color1;
+        text-shadow: none;
+        font-size: $font-size-small;
+        padding: 5px;
+        margin: 20px;
+        width: 150px;
+        height: 40px;
+        box-shadow: $box-shadow;
+        border-radius: 5px;
+
+        &:hover {
+            background-color: $color3;
+            text-shadow: $text-shadow;
+            cursor: pointer;
+        }
+    }
+
+    #grupe-table {
+        background-color: $color2;
+        width: 60%;
+        border-collapse: collapse;
+        border-radius: 10px;
+        box-shadow: $box-shadow;
+
+        th {
+            color: $color1;
+            background-color: $color4;
+            text-align: start;
+            padding: 10px;
+            font-size: $font-size-medium;
+            border-bottom: 1px solid $color1;
+        }
+
+        td {
+            padding: 10px;
+            border-bottom: 1px solid $color4;
+            border-right: 1px solid $color4;
+            height: 40px;
+        }
+    }
+}
