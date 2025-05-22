@@ -88,4 +88,12 @@ div table td button:hover {
   background-color: lightsalmon;
 }
 
+#korisnici-bez-grupecontainer {
+  margin-top: 200px;
+}
+
+#korisnici-container {
+  margin-bottom: 200px;
+}
+
 /*# sourceMappingURL=korisnici.css.map */

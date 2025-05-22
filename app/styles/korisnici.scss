@@ -49,6 +49,7 @@ div {
       font-size: $font-size-medium;
       border-bottom: 1px solid $color1;
     }
+
     td {
       padding: 10px;
       border-bottom: 1px solid $color4;
@@ -64,4 +65,12 @@ div {
       }
     }
   }
+}
+
+#korisnici-bez-grupecontainer {
+  margin-top: 200px;
+}
+
+#korisnici-container {
+  margin-bottom: 200px;
 }
