@@ -108,7 +108,9 @@ function renderKorisniciWithNoGrp(data) {
     editBtn.textContent = "Dodaj u grupu";
     editBtn.addEventListener("click", function () {
       // funkcija za dodavanje korisnika u grupu
-      window.location.href = "korisniciForma.html?id=" + korisnik["id"];
+      let urlParams = new URLSearchParams(window.location.search);
+      let grupaId = urlParams.get("id");
+      UbaciUGrupu(grupaId, korisnik["id"]);
     });
     cell3.appendChild(editBtn);
 
@@ -117,6 +119,30 @@ function renderKorisniciWithNoGrp(data) {
     newRow.appendChild(cell3);
     table.appendChild(newRow);
   });
+}
+
+function UbaciUGrupu(grupaId, korisnikId) {
+  fetch(`http://localhost:41322/api/grupe/${grupaId}/korisnici/${korisnikId}`, {
+    method: "PUT",
+  })
+    .then((response) => {
+      if (!response.ok) {
+        const error = new Error("Request failed. Status: " + response.status);
+        error.response = response;
+        throw error;
+      }
+      alert("Korisnik je uspešno dodat u grupu.");
+      getKorisnici();
+      getWithNoGrp();
+    })
+    .catch((error) => {
+      console.error("Error: " + error.message);
+      if (error.response && error.response === 404) {
+        alert("Korisnik nije u grupi");
+      } else {
+        alert("Doslo je do greske. Pokusajte ponovo.");
+      }
+    });
 }
 
 function izbaciIzGrupe(grupaId, korisnikId) {
