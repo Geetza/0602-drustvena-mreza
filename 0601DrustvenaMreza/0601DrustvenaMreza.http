@@ -1,0 +1,6 @@
+@_0601DrustvenaMreza_HostAddress = http://localhost:5154
+
+GET {{_0601DrustvenaMreza_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
