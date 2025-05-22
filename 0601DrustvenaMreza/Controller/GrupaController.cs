@@ -69,29 +69,36 @@ namespace _0601DrustvenaMreza.Controller
             return NoContent();
         }
 
-        [HttpGet("korisnici-bez-grupe")]
-        public ActionResult<List<Korisnik>> GetKorisnikeBezGrupe()
+        [HttpGet("{id}/korisnici-van-grupe")]
+        public ActionResult<List<Korisnik>> GetKorisnikeVanGrupe(int id)
         {
             List<Korisnik> sviKorisnici = KorisnikRepo.Data.Values.ToList();
-            List<Grupa> sveGrupe = GrupaRepo.Data.Values.ToList();
 
-            HashSet<int> korisniciUGrupamaIds = new HashSet<int>();
+            List<Korisnik> korisniciVanGrupe = new List<Korisnik>();
 
-            // Dodaj sve ID-jeve korisnika koji su u nekoj grupi
-            foreach (Grupa grupa in sveGrupe)
+            if (!GrupaRepo.Data.Keys.Contains(id))
             {
-                foreach (Korisnik k in grupa.korisnici.Values)
+                return NotFound("Grupa pod unetim Id-em ne postoji");
+            }
+
+            Grupa grupa = GrupaRepo.Data[id];
+
+            
+            foreach (Korisnik korisnik in sviKorisnici)
+            {
+                if (grupa.korisnici.ContainsKey(korisnik.Id))
                 {
-                    korisniciUGrupamaIds.Add(k.Id);
+                    continue;
+                } else
+                {
+                    korisniciVanGrupe.Add(korisnik);
                 }
             }
 
-            // Filtriraj korisnike koji nisu u nijednoj grupi
-            List<Korisnik> korisniciBezGrupe = sviKorisnici
-                .Where(k => !korisniciUGrupamaIds.Contains(k.Id))
-                .ToList();
+            
+            
 
-            return Ok(korisniciBezGrupe);
+            return Ok(korisniciVanGrupe);
         }
 
     }

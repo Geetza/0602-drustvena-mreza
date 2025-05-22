@@ -63,7 +63,15 @@ function renderKorisnici(data) {
 }
 
 function getWithNoGrp() {
-  fetch("http://localhost:41322/api/grupe/korisnici-bez-grupe")
+
+  let urlParams = new URLSearchParams(window.location.search);
+  let id = urlParams.get("id");
+
+  if (!id) {
+    return
+  }
+
+  fetch("http://localhost:41322/api/grupe/" + id + "/korisnici-van-grupe")
     .then((response) => {
       if (!response.ok) {
         throw new Error("Request failed. Status: " + response.status);
