@@ -402,7 +402,7 @@ FodyWeavers.xsd
 ### VisualStudio Patch ###
 # Additional files built by Visual Studio
 
-#Database
-\0601DrustvenaMreza\database
+
+database/
 
 # End of https://www.toptal.com/developers/gitignore/api/visualstudio

@@ -1,7 +1,10 @@
-﻿using _0601DrustvenaMreza.Model;
+﻿using System.Globalization;
+using _0601DrustvenaMreza.Model;
 using _0601DrustvenaMreza.Repository;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Data.Sqlite;
+
 
 namespace _0601DrustvenaMreza.Controller
 {
@@ -12,12 +15,74 @@ namespace _0601DrustvenaMreza.Controller
         private GrupaRepo grupaRepo = new GrupaRepo();
         private KorisnikRepo korisnikRepo = new KorisnikRepo();
 
+        //[HttpGet]
+        //public ActionResult<List<Korisnik>> GetAll()
+        //{
+        //    List<Korisnik> korisnici = KorisnikRepo.Data.Values.ToList();
+        //    return Ok(korisnici);
+        //}
+
+    
+
+   
         [HttpGet]
-        public ActionResult<List<Korisnik>> GetAll()
+        public ActionResult<List<Korisnik>> GetAllFromDatabase()
         {
-            List<Korisnik> korisnici = KorisnikRepo.Data.Values.ToList();
-            return Ok(korisnici);
+            try
+            {
+                string dbPath = Path.Combine("database", "mydatabase.db");
+                using var connection = new SqliteConnection($"Data Source={dbPath}");
+                Console.WriteLine(dbPath);
+
+                if (!System.IO.File.Exists(dbPath))
+                {
+                    throw new FileNotFoundException($"Baza podataka ne postoji na putanji: {dbPath}");
+                }
+
+                connection.Open();
+
+                string query = "SELECT * FROM Korisnici";
+                using var command = new SqliteCommand(query, connection);
+                using var reader = command.ExecuteReader();
+
+                List<Korisnik> korisnici = new List<Korisnik>();
+
+                while (reader.Read())
+                {
+                    Korisnik korisnik;
+                    int id = Convert.ToInt32(reader["Id"]);
+                    string korIme = reader["KorisnickoIme"]?.ToString();
+                    string ime = reader["Ime"]?.ToString();
+                    string prezime = reader["Prezime"]?.ToString();
+                    string datumRodjenjaString = reader["DatumRodjenja"].ToString();
+                    DateTime datumRodjenja = DateTime.ParseExact(datumRodjenjaString, "yyyy-MM-dd", CultureInfo.InvariantCulture);
+                    if (id != -1 && korIme != null && ime != null && prezime != null && datumRodjenja != DateTime.MinValue)
+                    {
+                         korisnik = new Korisnik(id, korIme, ime, prezime, datumRodjenja);
+                        korisnici.Add(korisnik);
+                    } else
+                    {
+                        return BadRequest();
+                    }
+                    
+                }
+
+                return Ok(korisnici);
+            }
+            catch (SqliteException ex)
+            {
+                Console.WriteLine($"SQLite error: {ex.Message}");
+                return BadRequest("Database error occurred.");
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Unexpected error: {ex.Message}");
+                return BadRequest("Unexpected error occurred.");
+            }
         }
+
+
+
 
         [HttpGet("{korisnikId}")]
         public ActionResult<Korisnik> GetById(int korisnikId)
