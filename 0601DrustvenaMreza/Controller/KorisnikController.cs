@@ -51,7 +51,7 @@ namespace _0601DrustvenaMreza.Controller
                 {
                     Korisnik korisnik;
                     int id = Convert.ToInt32(reader["Id"]);
-                    string korIme = reader["KorisnickoIme"]?.ToString();
+                    string korIme = reader["KorIme"]?.ToString();
                     string ime = reader["Ime"]?.ToString();
                     string prezime = reader["Prezime"]?.ToString();
                     string datumRodjenjaString = reader["DatumRodjenja"].ToString();
