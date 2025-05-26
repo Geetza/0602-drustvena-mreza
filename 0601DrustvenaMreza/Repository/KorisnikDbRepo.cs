@@ -151,7 +151,7 @@ namespace _0601DrustvenaMreza.Repository
                 connection.Open();
 
                 
-                string query = @"INSERT INTO Korisnici (KorIme,Ime, Prezime,DatumRodjenja) VALUES (@KorIme,@Ime,@Prezime,@DatumRodjenja); SELECT LAST_INSERT_ROWID();";
+                string query = "INSERT INTO Korisnici (KorIme,Ime, Prezime,DatumRodjenja) VALUES (@KorIme,@Ime,@Prezime,@DatumRodjenja); SELECT LAST_INSERT_ROWID();";
 
                 using SqliteCommand command = new SqliteCommand(query, connection);
 
@@ -203,7 +203,7 @@ namespace _0601DrustvenaMreza.Repository
                 connection.Open();
 
 
-                string query = @"Update Korisnici SET KorIme=@KorIme,Ime=@Ime,Prezime=@Prezime,DatumRodjenja=@DatumRodjenja  WHERE id = @Id; SELECT LAST_INSERT_ROWID();";
+                string query = "Update Korisnici SET KorIme=@KorIme,Ime=@Ime,Prezime=@Prezime,DatumRodjenja=@DatumRodjenja  WHERE id = @Id; SELECT LAST_INSERT_ROWID();";
 
                 using SqliteCommand command = new SqliteCommand(query, connection);
 
@@ -256,7 +256,7 @@ namespace _0601DrustvenaMreza.Repository
                 connection.Open();
 
 
-                string query = @"DELETE FROM Korisnici WHERE id=@Id; SELECT LAST_INSERT_ROWID();";
+                string query = "DELETE FROM Korisnici WHERE id=@Id; SELECT LAST_INSERT_ROWID();";
 
                 using SqliteCommand command = new SqliteCommand(query, connection);
 
