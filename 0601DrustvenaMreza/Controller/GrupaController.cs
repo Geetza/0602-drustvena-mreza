@@ -11,6 +11,7 @@ namespace _0601DrustvenaMreza.Controller
     [ApiController]
     public class GrupaController : ControllerBase
     {
+        private GrupaDbRepository grupaDbRepository = new GrupaDbRepository();
         private GrupaRepo grupaRepo = new GrupaRepo();
         private KorisnikRepo korisnikRepo = new KorisnikRepo();
 
@@ -18,7 +19,7 @@ namespace _0601DrustvenaMreza.Controller
         [HttpGet]
         public ActionResult<List<Grupa>> GetGroup()
         {
-            List<Grupa> grupeIzDB = GetAllFromDatabase();
+            List<Grupa> grupeIzDB = grupaDbRepository.GetAll();
             try
             {
                 if(grupeIzDB == null || grupeIzDB.Count == 0)
@@ -35,56 +36,24 @@ namespace _0601DrustvenaMreza.Controller
 
         }
 
-        // U okviru kontrolera za grupe izmenite metodu za dobavljanje svih grupa.
-        // Umesto kontaktiranja repozitorijuma, metoda poziva privatnu metodu kontrolera (npr. GetAllFromDatabase).
-        // Data metoda izvlači sve korisnike iz baze podataka i vraća ih.
-
-        private List<Grupa> GetAllFromDatabase()
+        // GET BY ID
+        [HttpGet("{id}")]
+        public ActionResult<Grupa> GetGroupById(int id)
         {
-            List<Grupa> grupe = new List<Grupa>();
+            Grupa grupaIzDB = grupaDbRepository.GetById(id);
             try
             {
-                string dbPath = Path.Combine("database", "mydatabase.db");
-                using SqliteConnection connection = new SqliteConnection($"Data Source={dbPath}");
-                connection.Open();
-
-                string query = "SELECT * FROM Grupe";
-                using SqliteCommand command = new SqliteCommand(query, connection);
-
-                using SqliteDataReader reader = command.ExecuteReader();
-                while (reader.Read())
+                if (grupaIzDB == null)
                 {
-                    int id = Convert.ToInt32(reader["Id"]);
-                    string ime = reader["Ime"].ToString();
-                    string datumOsnivanjaString = reader["DatumOsnivanja"].ToString();
-                    DateTime datumOsnivanja = DateTime.ParseExact(datumOsnivanjaString, "yyyy-MM-dd", CultureInfo.InvariantCulture);
-
-                    if (!string.IsNullOrWhiteSpace(ime) && !string.IsNullOrWhiteSpace(datumOsnivanjaString))
-                    {
-                        Grupa grupa = new Grupa(id, ime, datumOsnivanja);
-                        grupe.Add( grupa );
-                    }
-                    
+                    return NotFound();
                 }
-            }
-            catch (SqliteException ex)
-            {
-                Console.WriteLine($"Greška pri konekciji ili izvršavanju neispravnih SQL upita: {ex.Message}");
-            }
-            catch (FormatException ex)
-            {
-                Console.WriteLine($"Greška u konverziji podataka iz baze: {ex.Message}");
-            }
-            catch (InvalidOperationException ex)
-            {
-                Console.WriteLine($"Konekcija nije otvorena ili je otvorena više puta: {ex.Message}");
+                return Ok(grupaIzDB);
             }
             catch (Exception ex)
             {
-                Console.WriteLine($"Neočekivana greška: {ex.Message}");
+                Console.WriteLine($"Doslo je do greske: {ex.Message}");
+                return StatusCode(500);
             }
-
-            return grupe;
 
         }
 
