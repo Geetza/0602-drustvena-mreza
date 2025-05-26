@@ -44,7 +44,7 @@ namespace _0601DrustvenaMreza.Controller
         }
 
 
-        [HttpGet]
+        
         private List<Korisnik> GetAllFromDatabase()
         {
                 List<Korisnik> korisnici = new List<Korisnik>();
