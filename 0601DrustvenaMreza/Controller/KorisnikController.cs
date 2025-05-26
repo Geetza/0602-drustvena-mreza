@@ -22,12 +22,32 @@ namespace _0601DrustvenaMreza.Controller
         //    return Ok(korisnici);
         //}
 
-    
-
-   
+        // GET
         [HttpGet]
-        public ActionResult<List<Korisnik>> GetAllFromDatabase()
+        public ActionResult<List<Korisnik>> GetUsers()
         {
+            List<Korisnik> korisnici = GetAllFromDatabase();
+            try
+            {
+                if (korisnici == null || korisnici.Count == 0)
+                {
+                    return NotFound();
+                }
+                return Ok(korisnici);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Doslo je do greske: {ex.Message}");
+                return StatusCode(500);
+            }
+
+        }
+
+
+        [HttpGet]
+        private List<Korisnik> GetAllFromDatabase()
+        {
+                List<Korisnik> korisnici = new List<Korisnik>();
             try
             {
                 string dbPath = Path.Combine("database", "mydatabase.db");
@@ -45,7 +65,6 @@ namespace _0601DrustvenaMreza.Controller
                 using var command = new SqliteCommand(query, connection);
                 using var reader = command.ExecuteReader();
 
-                List<Korisnik> korisnici = new List<Korisnik>();
 
                 while (reader.Read())
                 {
@@ -62,22 +81,22 @@ namespace _0601DrustvenaMreza.Controller
                         korisnici.Add(korisnik);
                     } else
                     {
-                        return BadRequest();
+                        return korisnici;
                     }
                     
                 }
 
-                return Ok(korisnici);
+                return korisnici;
             }
             catch (SqliteException ex)
             {
                 Console.WriteLine($"SQLite error: {ex.Message}");
-                return BadRequest("Database error occurred.");
+                return korisnici;
             }
             catch (Exception ex)
             {
                 Console.WriteLine($"Unexpected error: {ex.Message}");
-                return BadRequest("Unexpected error occurred.");
+                return korisnici;
             }
         }
 
