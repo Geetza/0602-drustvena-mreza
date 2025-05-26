@@ -17,7 +17,7 @@ namespace _0601DrustvenaMreza.Controller
 
         private KorisnikDbRepo korisnikDbRepo = new KorisnikDbRepo();
 
-        
+
         [HttpGet]
         public ActionResult<List<Korisnik>> GetUsers()
         {
@@ -39,8 +39,8 @@ namespace _0601DrustvenaMreza.Controller
         }
 
 
-        
-        
+
+
 
 
 
@@ -48,7 +48,7 @@ namespace _0601DrustvenaMreza.Controller
         [HttpGet("{korisnikId}")]
         public ActionResult<Korisnik> GetById(int korisnikId)
         {
-            
+
 
             try
             {
@@ -70,68 +70,71 @@ namespace _0601DrustvenaMreza.Controller
         [HttpPost]
         public ActionResult<Korisnik> Create([FromBody] Korisnik noviKorisnik)
         {
-            if (string.IsNullOrWhiteSpace(noviKorisnik.KorIme) || string.IsNullOrWhiteSpace(noviKorisnik.Ime) ||
-                string.IsNullOrWhiteSpace(noviKorisnik.Prezime) || noviKorisnik.DatumRodjenja == DateTime.MinValue)
+            try
             {
-                return BadRequest();
-            }
+                if (string.IsNullOrWhiteSpace(noviKorisnik.KorIme) || string.IsNullOrWhiteSpace(noviKorisnik.Ime) ||
+                        string.IsNullOrWhiteSpace(noviKorisnik.Prezime) || noviKorisnik.DatumRodjenja == DateTime.MinValue)
+                {
+                    return BadRequest();
+                }
 
-            noviKorisnik.Id = korisnikDbRepo.InsertNewUser(noviKorisnik);
-            if (noviKorisnik.Id == 0)
+                noviKorisnik.Id = korisnikDbRepo.InsertNewUser(noviKorisnik);
+                if (noviKorisnik.Id == 0)
+                {
+                    return BadRequest();
+                }
+
+                return Ok(noviKorisnik);
+            }
+            catch (Exception ex)
             {
-                return BadRequest();
-            }
 
-            return Ok(noviKorisnik);
+                Console.WriteLine($"Doslo je do greske: {ex.Message}");
+                return StatusCode(500);
+            }
         }
 
-        //private int IzracunajNoviId(List<int> identifikatori)
-        //{
-        //    int maxId = 0;
-        //    foreach (int id in identifikatori)
-        //    {
-        //        if (id > maxId)
-        //        {
-        //            maxId = id;
-        //        }
-        //    }
 
-        //    return maxId + 1;
-        //}
 
         [HttpPut("{korisnikId}")]
         public ActionResult<Korisnik> Update(int korisnikId, [FromBody] Korisnik noviKorisnik)
         {
-            if (string.IsNullOrWhiteSpace(noviKorisnik.KorIme) || string.IsNullOrWhiteSpace(noviKorisnik.Ime) ||
-                string.IsNullOrWhiteSpace(noviKorisnik.Prezime) || noviKorisnik.DatumRodjenja == DateTime.Now)
+            try
             {
-                return BadRequest();
-            }
+                if (string.IsNullOrWhiteSpace(noviKorisnik.KorIme) || string.IsNullOrWhiteSpace(noviKorisnik.Ime) ||
+                        string.IsNullOrWhiteSpace(noviKorisnik.Prezime) || noviKorisnik.DatumRodjenja == DateTime.Now)
+                {
+                    return BadRequest();
+                }
 
-            if (!KorisnikRepo.Data.ContainsKey(korisnikId))
+
+
+                int rowsAffected = korisnikDbRepo.UpdateUser(korisnikId, noviKorisnik);
+
+                if (rowsAffected == 0)
+                {
+                    return BadRequest();
+                }
+
+                return Ok(noviKorisnik);
+            }
+            catch (Exception ex)
             {
-                return NotFound();
+
+                Console.WriteLine($"Doslo je do greske: {ex.Message}");
+                return StatusCode(500);
             }
-
-            Korisnik korisnik = KorisnikRepo.Data[korisnikId];
-            korisnik.KorIme = noviKorisnik.KorIme;
-            korisnik.Ime = noviKorisnik.Ime;
-            korisnik.Prezime = noviKorisnik.Prezime;
-            korisnik.DatumRodjenja = noviKorisnik.DatumRodjenja;
-            korisnikRepo.Save();
-
-            return Ok(noviKorisnik);
         }
+
         [HttpDelete("{korisnikId}")]
         public ActionResult Delete(int korisnikId)
         {
-            if (!KorisnikRepo.Data.ContainsKey(korisnikId))
+            
+           int rowsAffected =  korisnikDbRepo.DeleteById(korisnikId);
+           if (rowsAffected == 0)
             {
-                return NotFound();
+                return BadRequest();
             }
-            KorisnikRepo.Data.Remove(korisnikId);
-            korisnikRepo.Save();
-            korisnikRepo.SaveInCommonFile();
 
             return NoContent();
         }
