@@ -40,11 +40,6 @@ namespace _0601DrustvenaMreza.Controller
 
 
 
-
-
-
-
-
         [HttpGet("{korisnikId}")]
         public ActionResult<Korisnik> GetById(int korisnikId)
         {
