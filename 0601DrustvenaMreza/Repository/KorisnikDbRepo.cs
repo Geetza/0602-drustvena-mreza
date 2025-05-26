@@ -155,15 +155,118 @@ namespace _0601DrustvenaMreza.Repository
 
                 using SqliteCommand command = new SqliteCommand(query, connection);
 
-                // Dodavanje parametara za ime i godine
+                
                 command.Parameters.AddWithValue("@KorIme", korisnik.KorIme);
                 command.Parameters.AddWithValue("@Ime", korisnik.Ime);
                 command.Parameters.AddWithValue("@Prezime", korisnik.Prezime);
                 command.Parameters.AddWithValue("@DatumRodjenja", korisnik.DatumRodjenja.ToString("yyyy-MM-dd"));
 
-                // Izvršavanje oba upita, gde ExecuteScalar vraća id poslednjeg ubačenog reda
-                int lastInsertedId = Convert.ToInt32(command.ExecuteScalar());  // Izvršava oba upita i vraća id
+                
+                int lastInsertedId = Convert.ToInt32(command.ExecuteScalar());  
                 return lastInsertedId;
+
+            }
+            catch (SqliteException ex)
+            {
+                Console.WriteLine($"Greška pri konekciji ili izvršavanju neispravnih SQL upita: {ex.Message}");
+                throw;
+            }
+            catch (FormatException ex)
+            {
+                Console.WriteLine($"Greška u konverziji podataka iz baze: {ex.Message}");
+                throw;
+            }
+            catch (InvalidOperationException ex)
+            {
+                Console.WriteLine($"Konekcija nije otvorena ili je otvorena više puta: {ex.Message}");
+                throw;
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Neočekivana greška: {ex.Message}");
+                throw;
+            }
+        }
+
+        public int UpdateUser(int id,Korisnik noviKorisnik)
+        {
+            try
+            {
+                string dbPath = Path.Combine("database", "mydatabase.db");
+                using var connection = new SqliteConnection($"Data Source={dbPath}");
+
+                if (!System.IO.File.Exists(dbPath))
+                {
+                    throw new FileNotFoundException($"Baza podataka ne postoji na putanji: {dbPath}");
+                }
+
+                connection.Open();
+
+
+                string query = @"Update Korisnici SET KorIme=@KorIme,Ime=@Ime,Prezime=@Prezime,DatumRodjenja=@DatumRodjenja  WHERE id = @Id; SELECT LAST_INSERT_ROWID();";
+
+                using SqliteCommand command = new SqliteCommand(query, connection);
+
+                
+                command.Parameters.AddWithValue("@Id", id);
+                command.Parameters.AddWithValue("@KorIme", noviKorisnik.KorIme);
+                command.Parameters.AddWithValue("@Ime", noviKorisnik.Ime);
+                command.Parameters.AddWithValue("@Prezime", noviKorisnik.Prezime);
+                command.Parameters.AddWithValue("@DatumRodjenja", noviKorisnik.DatumRodjenja.ToString("yyyy-MM-dd"));
+
+
+                int affectedRows = command.ExecuteNonQuery(); 
+                return affectedRows;
+
+            }
+            catch (SqliteException ex)
+            {
+                Console.WriteLine($"Greška pri konekciji ili izvršavanju neispravnih SQL upita: {ex.Message}");
+                throw;
+            }
+            catch (FormatException ex)
+            {
+                Console.WriteLine($"Greška u konverziji podataka iz baze: {ex.Message}");
+                throw;
+            }
+            catch (InvalidOperationException ex)
+            {
+                Console.WriteLine($"Konekcija nije otvorena ili je otvorena više puta: {ex.Message}");
+                throw;
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Neočekivana greška: {ex.Message}");
+                throw;
+            }
+        }
+
+        public int DeleteById(int id)
+        {
+            try
+            {
+                string dbPath = Path.Combine("database", "mydatabase.db");
+                using var connection = new SqliteConnection($"Data Source={dbPath}");
+
+                if (!System.IO.File.Exists(dbPath))
+                {
+                    throw new FileNotFoundException($"Baza podataka ne postoji na putanji: {dbPath}");
+                }
+
+                connection.Open();
+
+
+                string query = @"DELETE FROM Korisnici WHERE id=@Id; SELECT LAST_INSERT_ROWID();";
+
+                using SqliteCommand command = new SqliteCommand(query, connection);
+
+
+                command.Parameters.AddWithValue("@Id", id);
+               
+
+
+                int affectedRows = command.ExecuteNonQuery();
+                return affectedRows;
 
             }
             catch (SqliteException ex)
