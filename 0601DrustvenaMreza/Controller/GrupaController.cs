@@ -33,16 +33,15 @@ namespace _0601DrustvenaMreza.Controller
                 Console.WriteLine($"Doslo je do greske: {ex.Message}");
                 return StatusCode(500);
             }
-
         }
 
         // GET BY ID
         [HttpGet("{id}")]
         public ActionResult<Grupa> GetGroupById(int id)
         {
-            Grupa grupaIzDB = grupaDbRepository.GetById(id);
             try
             {
+                Grupa grupaIzDB = grupaDbRepository.GetById(id);
                 if (grupaIzDB == null)
                 {
                     return NotFound();
@@ -54,51 +53,77 @@ namespace _0601DrustvenaMreza.Controller
                 Console.WriteLine($"Doslo je do greske: {ex.Message}");
                 return StatusCode(500);
             }
-
         }
 
-        // POST
+        // CREATE
         [HttpPost]
         public ActionResult<Grupa> CreateGroup([FromBody] Grupa novaGrupa)
         {
-            if (string.IsNullOrWhiteSpace(novaGrupa.Ime))
+            try
             {
-                return BadRequest();
+                if (string.IsNullOrWhiteSpace(novaGrupa.Ime))
+                {
+                    return BadRequest();
+                }
+                if (novaGrupa.DatumOsnivanja > DateTime.Now)
+                {
+                    return BadRequest();
+                }
+
+                novaGrupa.Id = grupaDbRepository.Create(novaGrupa);
+                if (novaGrupa.Id == 0)
+                {
+                    return BadRequest();
+                }
+
+                return Ok(novaGrupa);
             }
-
-            novaGrupa.Id = IzracunajNoviId(GrupaRepo.Data.Keys.ToList());
-            novaGrupa.DatumOsnivanja = DateTime.Now;
-            GrupaRepo.Data[novaGrupa.Id] = novaGrupa;
-            grupaRepo.Save();
-
-            return Ok(novaGrupa);
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Doslo je do greske: {ex.Message}");
+                return StatusCode(500);
+            }
         }
 
-        private int IzracunajNoviId(List<int> identifikatori)
+        // UPDATE
+        [HttpPut("{id}")]
+        public ActionResult<Grupa> UpdateGroup(int id,[FromBody] Grupa novaGrupa)
         {
-            int maxId = 0;
-            foreach (int id in identifikatori)
+            try
             {
-                if (id > maxId)
+                if (string.IsNullOrWhiteSpace(novaGrupa.Ime))
                 {
-                    maxId = id;
+                    return BadRequest();
                 }
-            }
+                if (novaGrupa.DatumOsnivanja > DateTime.Now)
+                {
+                    return BadRequest();
+                }
 
-            return maxId + 1;
+                int rowsAffected = grupaDbRepository.Update(id, novaGrupa);
+                if (rowsAffected == 0)
+                {
+                    return BadRequest();
+                }
+
+                return Ok(novaGrupa);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Doslo je do greske: {ex.Message}");
+                return StatusCode(500);
+            }
         }
 
         // DELETE
         [HttpDelete("{id}")]
         public ActionResult DeleteGroup(int id)
         {
-            if (!GrupaRepo.Data.Keys.Contains(id))
+            int rowsAffected = grupaDbRepository.Delete(id);
+            if (rowsAffected == 0)
             {
-                return NotFound("Grupa pod unetim Id-em ne postoji");
+                return NotFound();
             }
-
-            GrupaRepo.Data.Remove(id);
-            grupaRepo.Save();
 
             return NoContent();
         }
@@ -128,9 +153,6 @@ namespace _0601DrustvenaMreza.Controller
                     korisniciVanGrupe.Add(korisnik);
                 }
             }
-
-            
-            
 
             return Ok(korisniciVanGrupe);
         }
