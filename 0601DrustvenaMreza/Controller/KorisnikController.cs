@@ -25,16 +25,27 @@ namespace _0601DrustvenaMreza.Controller
         // GET api/korisnici?page={page}&pageSize={pageSize}
 
         [HttpGet]
-        public ActionResult<List<Korisnik>> GetPaged([FromQuery] int page, [FromQuery] int pageSize)
+        public ActionResult GetPaged([FromQuery] int page = 1, [FromQuery] int pageSize = 10)
         {
-            List<Korisnik> korisnici = korisnikDbRepo.GetPaged(page,pageSize);
+            if (page < 1 || pageSize < 1)
+            {
+                return BadRequest("Page i pagesize moraju biti veći od nule.");
+            }
+
+            List<Korisnik> korisnici = korisnikDbRepo.GetPaged(page, pageSize);
+            int totalCount = korisnikDbRepo.CountAll();
+            Object result = new
+            {
+                Data = korisnici,
+                TotalCount = totalCount
+            };
             try
             {
                 if (korisnici == null || korisnici.Count == 0)
                 {
                     return NotFound();
                 }
-                return Ok(korisnici);
+                return Ok(result);
             }
             catch (Exception ex)
             {

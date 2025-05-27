@@ -1,4 +1,5 @@
 ﻿using _0601DrustvenaMreza.Model;
+using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.Data.Sqlite;
 using System.Globalization;
 
@@ -250,6 +251,45 @@ namespace _0601DrustvenaMreza.Repository
                 int affectedRows = command.ExecuteNonQuery();
                 return affectedRows;
 
+            }
+            catch (SqliteException ex)
+            {
+                Console.WriteLine($"Greška pri konekciji ili izvršavanju neispravnih SQL upita: {ex.Message}");
+                throw;
+            }
+            catch (FormatException ex)
+            {
+                Console.WriteLine($"Greška u konverziji podataka iz baze: {ex.Message}");
+                throw;
+            }
+            catch (InvalidOperationException ex)
+            {
+                Console.WriteLine($"Konekcija nije otvorena ili je otvorena više puta: {ex.Message}");
+                throw;
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Neočekivana greška: {ex.Message}");
+                throw;
+            }
+        }
+
+        public int CountAll()
+        {
+            List<Korisnik> korisnici = new List<Korisnik>();
+            try
+            {
+
+                using SqliteConnection connection = new SqliteConnection(connectionString);
+                connection.Open();
+
+                string query = "SELECT COUNT(*) FROM Korisnici";
+                using SqliteCommand command = new SqliteCommand(query,connection);
+                int totalCount = Convert.ToInt32(command.ExecuteScalar());
+
+                return totalCount;
+
+                
             }
             catch (SqliteException ex)
             {
