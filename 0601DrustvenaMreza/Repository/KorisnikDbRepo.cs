@@ -7,26 +7,29 @@ namespace _0601DrustvenaMreza.Repository
     public class KorisnikDbRepo
     {
 
-        public KorisnikDbRepo() { }
+        private readonly string connectionString;
 
-        public List<Korisnik> GetAll()
+        public KorisnikDbRepo(IConfiguration configuration)
+        {
+            connectionString = configuration["ConnectionString:SQLiteConnection"];
+        }
+
+        public List<Korisnik> GetPaged(int page, int pageSize)
         {
             List<Korisnik> korisnici = new List<Korisnik>();
             try
             {
-                string dbPath = Path.Combine("database", "mydatabase.db");
-                using var connection = new SqliteConnection($"Data Source={dbPath}");
-                Console.WriteLine(dbPath);
 
-                if (!System.IO.File.Exists(dbPath))
-                {
-                    throw new FileNotFoundException($"Baza podataka ne postoji na putanji: {dbPath}");
-                }
+                using SqliteConnection connection = new SqliteConnection(connectionString);
+
+
 
                 connection.Open();
 
-                string query = "SELECT * FROM Korisnici";
+                string query = "SELECT * FROM Korisnici LIMIT @PageSize OFFSET @Offset";
                 using var command = new SqliteCommand(query, connection);
+                command.Parameters.AddWithValue("@PageSize", pageSize);
+                command.Parameters.AddWithValue("@Offset", pageSize * (page - 1));
                 using var reader = command.ExecuteReader();
 
 
@@ -83,13 +86,10 @@ namespace _0601DrustvenaMreza.Repository
 
             try
             {
-                string dbPath = Path.Combine("database", "mydatabase.db");
-                using var connection = new SqliteConnection($"Data Source={dbPath}");
 
-                if (!System.IO.File.Exists(dbPath))
-                {
-                    throw new FileNotFoundException($"Baza podataka ne postoji na putanji: {dbPath}");
-                }
+                using SqliteConnection connection = new SqliteConnection(connectionString);
+
+
 
                 connection.Open();
 
@@ -140,29 +140,23 @@ namespace _0601DrustvenaMreza.Repository
         {
             try
             {
-                string dbPath = Path.Combine("database", "mydatabase.db");
-                using var connection = new SqliteConnection($"Data Source={dbPath}");
-
-                if (!System.IO.File.Exists(dbPath))
-                {
-                    throw new FileNotFoundException($"Baza podataka ne postoji na putanji: {dbPath}");
-                }
+                using SqliteConnection connection = new SqliteConnection(connectionString);
 
                 connection.Open();
 
-                
+
                 string query = "INSERT INTO Korisnici (KorIme,Ime, Prezime,DatumRodjenja) VALUES (@KorIme,@Ime,@Prezime,@DatumRodjenja); SELECT LAST_INSERT_ROWID();";
 
                 using SqliteCommand command = new SqliteCommand(query, connection);
 
-                
+
                 command.Parameters.AddWithValue("@KorIme", korisnik.KorIme);
                 command.Parameters.AddWithValue("@Ime", korisnik.Ime);
                 command.Parameters.AddWithValue("@Prezime", korisnik.Prezime);
                 command.Parameters.AddWithValue("@DatumRodjenja", korisnik.DatumRodjenja.ToString("yyyy-MM-dd"));
 
-                
-                int lastInsertedId = Convert.ToInt32(command.ExecuteScalar());  
+
+                int lastInsertedId = Convert.ToInt32(command.ExecuteScalar());
                 return lastInsertedId;
 
             }
@@ -188,17 +182,11 @@ namespace _0601DrustvenaMreza.Repository
             }
         }
 
-        public int UpdateUser(int id,Korisnik noviKorisnik)
+        public int UpdateUser(int id, Korisnik noviKorisnik)
         {
             try
             {
-                string dbPath = Path.Combine("database", "mydatabase.db");
-                using var connection = new SqliteConnection($"Data Source={dbPath}");
-
-                if (!System.IO.File.Exists(dbPath))
-                {
-                    throw new FileNotFoundException($"Baza podataka ne postoji na putanji: {dbPath}");
-                }
+                using SqliteConnection connection = new SqliteConnection(connectionString);
 
                 connection.Open();
 
@@ -207,7 +195,7 @@ namespace _0601DrustvenaMreza.Repository
 
                 using SqliteCommand command = new SqliteCommand(query, connection);
 
-                
+
                 command.Parameters.AddWithValue("@Id", id);
                 command.Parameters.AddWithValue("@KorIme", noviKorisnik.KorIme);
                 command.Parameters.AddWithValue("@Ime", noviKorisnik.Ime);
@@ -215,7 +203,7 @@ namespace _0601DrustvenaMreza.Repository
                 command.Parameters.AddWithValue("@DatumRodjenja", noviKorisnik.DatumRodjenja.ToString("yyyy-MM-dd"));
 
 
-                int affectedRows = command.ExecuteNonQuery(); 
+                int affectedRows = command.ExecuteNonQuery();
                 return affectedRows;
 
             }
@@ -245,13 +233,7 @@ namespace _0601DrustvenaMreza.Repository
         {
             try
             {
-                string dbPath = Path.Combine("database", "mydatabase.db");
-                using var connection = new SqliteConnection($"Data Source={dbPath}");
-
-                if (!System.IO.File.Exists(dbPath))
-                {
-                    throw new FileNotFoundException($"Baza podataka ne postoji na putanji: {dbPath}");
-                }
+                using SqliteConnection connection = new SqliteConnection(connectionString);
 
                 connection.Open();
 
@@ -262,7 +244,7 @@ namespace _0601DrustvenaMreza.Repository
 
 
                 command.Parameters.AddWithValue("@Id", id);
-               
+
 
 
                 int affectedRows = command.ExecuteNonQuery();

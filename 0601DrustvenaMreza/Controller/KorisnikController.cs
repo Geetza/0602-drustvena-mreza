@@ -15,13 +15,19 @@ namespace _0601DrustvenaMreza.Controller
         private GrupaRepo grupaRepo = new GrupaRepo();
         private KorisnikRepo korisnikRepo = new KorisnikRepo();
 
-        private KorisnikDbRepo korisnikDbRepo = new KorisnikDbRepo();
+        private KorisnikDbRepo korisnikDbRepo;
 
+        public KorisnikController(IConfiguration configuration)
+        {
+            korisnikDbRepo = new KorisnikDbRepo(configuration);
+        }
+
+        // GET api/korisnici?page={page}&pageSize={pageSize}
 
         [HttpGet]
-        public ActionResult<List<Korisnik>> GetUsers()
+        public ActionResult<List<Korisnik>> GetPaged([FromQuery] int page, [FromQuery] int pageSize)
         {
-            List<Korisnik> korisnici = korisnikDbRepo.GetAll();
+            List<Korisnik> korisnici = korisnikDbRepo.GetPaged(page,pageSize);
             try
             {
                 if (korisnici == null || korisnici.Count == 0)
@@ -32,8 +38,7 @@ namespace _0601DrustvenaMreza.Controller
             }
             catch (Exception ex)
             {
-                Console.WriteLine($"Doslo je do greske: {ex.Message}");
-                return StatusCode(500);
+                return Problem($"Doslo je do greske: {ex.Message}");
             }
 
         }
@@ -56,9 +61,7 @@ namespace _0601DrustvenaMreza.Controller
             }
             catch (Exception ex)
             {
-
-                Console.WriteLine($"Doslo je do greske: {ex.Message}");
-                return StatusCode(500);
+                return Problem($"Doslo je do greske: {ex.Message}");
             }
         }
 
@@ -83,9 +86,7 @@ namespace _0601DrustvenaMreza.Controller
             }
             catch (Exception ex)
             {
-
-                Console.WriteLine($"Doslo je do greske: {ex.Message}");
-                return StatusCode(500);
+                return Problem($"Doslo je do greske: {ex.Message}");
             }
         }
 
@@ -106,6 +107,11 @@ namespace _0601DrustvenaMreza.Controller
 
                 int rowsAffected = korisnikDbRepo.UpdateUser(korisnikId, noviKorisnik);
 
+                if (korisnikId <= 0)
+                {
+                    return NotFound();
+                }
+
                 if (rowsAffected == 0)
                 {
                     return BadRequest();
@@ -115,23 +121,28 @@ namespace _0601DrustvenaMreza.Controller
             }
             catch (Exception ex)
             {
-
-                Console.WriteLine($"Doslo je do greske: {ex.Message}");
-                return StatusCode(500);
+                return Problem($"Doslo je do greske: {ex.Message}");
             }
         }
 
         [HttpDelete("{korisnikId}")]
         public ActionResult Delete(int korisnikId)
         {
-            
-           int rowsAffected =  korisnikDbRepo.DeleteById(korisnikId);
-           if (rowsAffected == 0)
-            {
-                return BadRequest();
-            }
 
-            return NoContent();
+            try
+            {
+                int rowsAffected = korisnikDbRepo.DeleteById(korisnikId);
+                if (rowsAffected == 0)
+                {
+                    return NotFound();
+                }
+
+                return NoContent();
+            }
+            catch (Exception ex)
+            {
+                return Problem($"Doslo je do greske: {ex.Message}");
+            }
         }
     }
 }
