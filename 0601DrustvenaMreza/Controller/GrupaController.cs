@@ -4,6 +4,7 @@ using _0601DrustvenaMreza.Repository;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Data.Sqlite;
+using static System.Reflection.Metadata.BlobBuilder;
 
 namespace _0601DrustvenaMreza.Controller
 {
@@ -11,27 +12,35 @@ namespace _0601DrustvenaMreza.Controller
     [ApiController]
     public class GrupaController : ControllerBase
     {
-        private GrupaDbRepository grupaDbRepository = new GrupaDbRepository();
-        private GrupaRepo grupaRepo = new GrupaRepo();
-        private KorisnikRepo korisnikRepo = new KorisnikRepo();
+        private readonly GrupaDbRepository grupaRepo;
+
+        public GrupaController(IConfiguration configuration)
+        {
+            grupaRepo = new GrupaDbRepository(configuration);
+        }
 
         // GET
         [HttpGet]
-        public ActionResult<List<Grupa>> GetGroup()
+        public ActionResult GetPaged([FromQuery] int page = 1, [FromQuery] int pageSize = 10)
         {
-            List<Grupa> grupeIzDB = grupaDbRepository.GetAll();
+            if (page < 1 || pageSize < 1)
+            {
+                return BadRequest();
+            }
             try
             {
-                if(grupeIzDB == null || grupeIzDB.Count == 0)
+                List<Grupa> grupeIzDB = grupaRepo.GetPaged(page, pageSize);
+                int totalCount = grupaRepo.CountAll();
+                Object result = new
                 {
-                    return NotFound();
-                }
-                return Ok(grupeIzDB);
+                    Data = grupeIzDB,
+                    TotalCount = totalCount
+                };
+                return Ok(result);
             }
             catch(Exception ex)
             {
-                Console.WriteLine($"Doslo je do greske: {ex.Message}");
-                return StatusCode(500);
+                return Problem($"Doslo je do greske: {ex.Message}");
             }
         }
 
@@ -41,7 +50,7 @@ namespace _0601DrustvenaMreza.Controller
         {
             try
             {
-                Grupa grupaIzDB = grupaDbRepository.GetById(id);
+                Grupa grupaIzDB = grupaRepo.GetById(id);
                 if (grupaIzDB == null)
                 {
                     return NotFound();
@@ -50,8 +59,7 @@ namespace _0601DrustvenaMreza.Controller
             }
             catch (Exception ex)
             {
-                Console.WriteLine($"Doslo je do greske: {ex.Message}");
-                return StatusCode(500);
+                return Problem($"Doslo je do greske: {ex.Message}");
             }
         }
 
@@ -70,7 +78,7 @@ namespace _0601DrustvenaMreza.Controller
                     return BadRequest();
                 }
 
-                novaGrupa.Id = grupaDbRepository.Create(novaGrupa);
+                novaGrupa.Id = grupaRepo.Create(novaGrupa);
                 if (novaGrupa.Id == 0)
                 {
                     return BadRequest();
@@ -80,8 +88,7 @@ namespace _0601DrustvenaMreza.Controller
             }
             catch (Exception ex)
             {
-                Console.WriteLine($"Doslo je do greske: {ex.Message}");
-                return StatusCode(500);
+                return Problem($"Doslo je do greske: {ex.Message}");
             }
         }
 
@@ -100,7 +107,7 @@ namespace _0601DrustvenaMreza.Controller
                     return BadRequest();
                 }
 
-                int rowsAffected = grupaDbRepository.Update(id, novaGrupa);
+                int rowsAffected = grupaRepo.Update(id, novaGrupa);
                 if (rowsAffected == 0)
                 {
                     return BadRequest();
@@ -110,8 +117,7 @@ namespace _0601DrustvenaMreza.Controller
             }
             catch (Exception ex)
             {
-                Console.WriteLine($"Doslo je do greske: {ex.Message}");
-                return StatusCode(500);
+                return Problem($"Doslo je do greske: {ex.Message}");
             }
         }
 
@@ -119,13 +125,20 @@ namespace _0601DrustvenaMreza.Controller
         [HttpDelete("{id}")]
         public ActionResult DeleteGroup(int id)
         {
-            int rowsAffected = grupaDbRepository.Delete(id);
-            if (rowsAffected == 0)
+            try
             {
-                return NotFound();
-            }
+                int rowsAffected = grupaRepo.Delete(id);
+                if (rowsAffected == 0)
+                {
+                    return NotFound();
+                }
 
-            return NoContent();
+                return NoContent();
+            }
+            catch (Exception ex)
+            {
+                return Problem($"Doslo je do greske: {ex.Message}");
+            }
         }
 
         [HttpGet("{id}/korisnici-van-grupe")]

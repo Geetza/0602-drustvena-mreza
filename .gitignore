@@ -403,6 +403,6 @@ FodyWeavers.xsd
 # Additional files built by Visual Studio
 
 
-database/
+0601DrustvenaMreza\Database\mydatabase.db
 
 # End of https://www.toptal.com/developers/gitignore/api/visualstudio

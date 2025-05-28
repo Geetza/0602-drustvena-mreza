@@ -8,11 +8,11 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <None Remove="database\mydatabase.db" />
+    <None Remove="Database\mydatabase.db" />
   </ItemGroup>
 
   <ItemGroup>
-    <Content Include="database\mydatabase.db">
+    <Content Include="Database\mydatabase.db">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
   </ItemGroup>

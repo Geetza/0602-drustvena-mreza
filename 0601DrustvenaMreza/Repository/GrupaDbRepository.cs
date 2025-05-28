@@ -8,18 +8,25 @@ namespace _0601DrustvenaMreza.Repository
 {
     public class GrupaDbRepository
     {
-        // GET ALL
-        public List<Grupa> GetAll()
+        private readonly string connectionString;
+        public GrupaDbRepository(IConfiguration configuration)
+        {
+            connectionString = configuration["ConnectionString:SQLiteConnection"];
+        }
+
+        // GET ALL --> GETPaged
+        public List<Grupa> GetPaged(int page, int pageSize)
         {
             List<Grupa> grupe = new List<Grupa>();
             try
             {
-                string dbPath = Path.Combine("database", "mydatabase.db");
-                using SqliteConnection connection = new SqliteConnection($"Data Source={dbPath}");
+                using SqliteConnection connection = new SqliteConnection(connectionString);
                 connection.Open();
 
-                string query = "SELECT * FROM Grupe";
+                string query = "SELECT * FROM Grupe LIMIT @pageSize OFFSET @offset";
                 using SqliteCommand command = new SqliteCommand(query, connection);
+                command.Parameters.AddWithValue("@pageSize", pageSize);
+                command.Parameters.AddWithValue("@offset", pageSize * (page - 1));
 
                 using SqliteDataReader reader = command.ExecuteReader();
                 while (reader.Read())
@@ -113,8 +120,7 @@ namespace _0601DrustvenaMreza.Repository
         {
             try
             {
-                string dbPath = Path.Combine("database", "mydatabase.db");
-                using SqliteConnection connection = new SqliteConnection($"Data Source={dbPath}");
+                using SqliteConnection connection = new SqliteConnection(connectionString);
                 connection.Open();
 
                 string query = "INSERT INTO Grupe (Ime,DatumOsnivanja) VALUES (@Ime,@DatumOsnivanja); SELECT LAST_INSERT_ROWID();";
@@ -152,8 +158,7 @@ namespace _0601DrustvenaMreza.Repository
         {
             try
             {
-                string dbPath = Path.Combine("database", "mydatabase.db");
-                using SqliteConnection connection = new SqliteConnection($"Data Source={dbPath}");
+                using SqliteConnection connection = new SqliteConnection(connectionString);
                 connection.Open();
 
                 string query = "UPDATE Grupe SET Ime=@Ime,DatumOsnivanja=@DatumOsnivanja WHERE Id=@Id;";
@@ -192,8 +197,7 @@ namespace _0601DrustvenaMreza.Repository
         {
             try
             {
-                string dbPath = Path.Combine("database", "mydatabase.db");
-                using SqliteConnection connection = new SqliteConnection($"Data Source={dbPath}");
+                using SqliteConnection connection = new SqliteConnection(connectionString);
                 connection.Open();
 
                 string query = "DELETE FROM Grupe WHERE Id=@Id;";
@@ -203,6 +207,43 @@ namespace _0601DrustvenaMreza.Repository
 
                 int rowsAffected = command.ExecuteNonQuery();
                 return rowsAffected;
+            }
+            catch (SqliteException ex)
+            {
+                Console.WriteLine($"Greška pri konekciji ili izvršavanju neispravnih SQL upita: {ex.Message}");
+                throw;
+            }
+            catch (FormatException ex)
+            {
+                Console.WriteLine($"Greška u konverziji podataka iz baze: {ex.Message}");
+                throw;
+            }
+            catch (InvalidOperationException ex)
+            {
+                Console.WriteLine($"Konekcija nije otvorena ili je otvorena više puta: {ex.Message}");
+                throw;
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Neočekivana greška: {ex.Message}");
+                throw;
+            }
+        }
+
+        // COUNT ALL
+        public int CountAll()
+        {
+            List<Group> grupe = new List<Group>();
+            try
+            {
+                using SqliteConnection connection = new SqliteConnection(connectionString);
+                connection.Open();
+
+                string query = "SELECT COUNT(*) FROM Grupe";
+                using SqliteCommand command = new SqliteCommand(query, connection);
+                int totalCount = Convert.ToInt32(command.ExecuteScalar());
+
+                return totalCount;
             }
             catch (SqliteException ex)
             {
