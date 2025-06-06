@@ -72,7 +72,6 @@ namespace _0601DrustvenaMreza.Repository
             {
                 foreach (Grupa g in GrupaRepo.Data.Values)
                 {
-                    if (g.korisnici.ContainsKey(k.Id))
                         lines.Add($"{k.Id},{g.Id}");
                 }
             }

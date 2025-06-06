@@ -19,6 +19,22 @@ namespace _0601DrustvenaMreza.Controller
             grupaRepo = new GrupaDbRepository(configuration);
         }
 
+        // GET WITH USERS
+        [HttpGet("sa-korisnicima")]
+        public ActionResult<List<Grupa>> GetAll()
+        {
+            try
+            {
+                List<Grupa> grupe = grupaRepo.GetWithUsers();
+                return Ok(grupe);
+            }
+            catch (Exception ex)
+            {
+                return Problem($"Doslo je do greske: {ex.Message}");
+            }
+
+        }
+
         // GET
         [HttpGet]
         public ActionResult GetPaged([FromQuery] int page = 1, [FromQuery] int pageSize = 10)
@@ -141,34 +157,7 @@ namespace _0601DrustvenaMreza.Controller
             }
         }
 
-        [HttpGet("{id}/korisnici-van-grupe")]
-        public ActionResult<List<Korisnik>> GetKorisnikeVanGrupe(int id)
-        {
-            List<Korisnik> sviKorisnici = KorisnikRepo.Data.Values.ToList();
-
-            List<Korisnik> korisniciVanGrupe = new List<Korisnik>();
-
-            if (!GrupaRepo.Data.Keys.Contains(id))
-            {
-                return NotFound("Grupa pod unetim Id-em ne postoji");
-            }
-
-            Grupa grupa = GrupaRepo.Data[id];
-
-            
-            foreach (Korisnik korisnik in sviKorisnici)
-            {
-                if (grupa.korisnici.ContainsKey(korisnik.Id))
-                {
-                    continue;
-                } else
-                {
-                    korisniciVanGrupe.Add(korisnik);
-                }
-            }
-
-            return Ok(korisniciVanGrupe);
-        }
+        
 
     }
 }

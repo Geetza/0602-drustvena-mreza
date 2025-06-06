@@ -8,7 +8,7 @@
 
         private DateTime datumOsnivanja;
 
-        public Dictionary<int, Korisnik> korisnici = new Dictionary<int, Korisnik>();
+        public List <Korisnik> korisnici = new List<Korisnik>();
 
         public int Id { get => id; set => id = value; }
         public string Ime { get => ime; set => ime = value; }
