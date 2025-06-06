@@ -36,7 +36,7 @@ namespace _0601DrustvenaMreza.Controller
         }
 
         [HttpPut]
-        public ActionResult<int> PutUserIntoGroup(int grupaId, [FromQuery] int korisnikId)
+        public ActionResult<int> PutUserIntoGroup(int grupaId, [FromBody] int korisnikId)
         {
             try
             {
@@ -61,7 +61,7 @@ namespace _0601DrustvenaMreza.Controller
         }
 
         [HttpDelete]
-        public ActionResult<int> RemoveUserFromGroup(int grupaId, [FromQuery] int korisnikId)
+        public ActionResult<int> RemoveUserFromGroup(int grupaId, [FromBody] int korisnikId)
         {
             try
             {
