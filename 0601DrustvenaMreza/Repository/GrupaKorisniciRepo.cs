@@ -140,5 +140,46 @@ namespace _0601DrustvenaMreza.Repository
                 throw;
             }
         }
+
+        // REMOVE KORISNIK FROM GROUP
+        public int RemoveKorisnikFromGroup(int grupaId,int korisnikId)
+        {
+            try
+            {
+                using SqliteConnection connection = new SqliteConnection(connectionString);
+                connection.Open();
+
+                string deleteQuery = @"DELETE
+                                       FROM GrupaKorisnici
+                                       WHERE KorisnikId=@korisnikId AND GrupaId=@grupaId;";
+                using SqliteCommand commandDelete = new SqliteCommand(deleteQuery, connection);
+                commandDelete.Parameters.AddWithValue("@korisnikId", korisnikId);
+                commandDelete.Parameters.AddWithValue("@grupaId", grupaId);
+
+                int rowsAffected = commandDelete.ExecuteNonQuery();
+                return rowsAffected;
+            }
+            catch (SqliteException ex)
+            {
+                Console.WriteLine($"Greška pri konekciji ili izvršavanju neispravnih SQL upita: {ex.Message}");
+                throw;
+            }
+            catch (FormatException ex)
+            {
+                Console.WriteLine($"Greška u konverziji podataka iz baze: {ex.Message}");
+                throw;
+            }
+            catch (InvalidOperationException ex)
+            {
+                Console.WriteLine($"Konekcija nije otvorena ili je otvorena više puta: {ex.Message}");
+                throw;
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Neočekivana greška: {ex.Message}");
+                throw;
+            }
+        }
+
     }
 }

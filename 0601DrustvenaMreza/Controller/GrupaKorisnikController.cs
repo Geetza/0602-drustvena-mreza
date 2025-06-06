@@ -59,6 +59,24 @@ namespace _0601DrustvenaMreza.Controller
                 return Problem($"Doslo je do greske: {ex.Message}");
             }
         }
-        
+
+        [HttpDelete]
+        public ActionResult<int> RemoveUserFromGroup(int grupaId, [FromQuery] int korisnikId)
+        {
+            try
+            {
+                int rowsAffected = grupaKorisnikRepo.RemoveKorisnikFromGroup(grupaId, korisnikId);
+                if (rowsAffected == 0)
+                {
+                    return NotFound();
+                }
+
+                return NoContent();
+            }
+            catch (Exception ex)
+            {
+                return Problem($"Doslo je do greske: {ex.Message}");
+            }
+        }
     }
 }
