@@ -35,6 +35,30 @@ namespace _0601DrustvenaMreza.Controller
 
         }
 
+        [HttpPut]
+        public ActionResult<int> PutUserIntoGroup(int grupaId, [FromQuery] int korisnikId)
+        {
+            try
+            {
+                if (korisnikId <= 0)
+                {
+                    return BadRequest("Nevalidan ID korisnika");
+                }
+
+                int lastRowInsertedId = grupaKorisnikRepo.InsertKorisnikInGroup(grupaId,korisnikId);
+
+                if (lastRowInsertedId == 0)
+                {
+                    return Ok("Korisnik je vec u grupi");
+                }
+
+                return NoContent();
+            }
+            catch (Exception ex)
+            {
+                return Problem($"Doslo je do greske: {ex.Message}");
+            }
+        }
         
     }
 }

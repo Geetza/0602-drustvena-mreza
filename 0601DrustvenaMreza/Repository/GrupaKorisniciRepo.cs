@@ -87,5 +87,58 @@ namespace _0601DrustvenaMreza.Repository
 
             return currentGrupa;
         }
+
+        // INSERT KORISNIK INTO GROUP
+        public int InsertKorisnikInGroup(int grupaId,int korisnikId)
+        {
+            try
+            {
+                using SqliteConnection connection = new SqliteConnection(connectionString);
+                connection.Open();
+                
+                string checkQuery = @"SELECT COUNT(*)
+                                      FROM GrupaKorisnici
+                                      WHERE KorisnikId=@korisnikId AND GrupaId=@grupaId;";
+                using SqliteCommand commandCheck = new SqliteCommand(checkQuery, connection);
+                commandCheck.Parameters.AddWithValue("@korisnikId", korisnikId);
+                commandCheck.Parameters.AddWithValue("@grupaId", grupaId);
+
+                int rowsFound = Convert.ToInt32(commandCheck.ExecuteScalar());
+                if (rowsFound > 0)
+                {
+                    return 0;
+                }
+                
+                string insertQuery = @"INSERT INTO GrupaKorisnici (KorisnikId,GrupaId)
+                                       VALUES (@korisnikId,@grupaId);
+                                       SELECT LAST_INSERT_ROWID();";
+                using SqliteCommand commandInsert = new SqliteCommand(insertQuery, connection);
+                commandInsert.Parameters.AddWithValue("@grupaId", grupaId);
+                commandInsert.Parameters.AddWithValue("@korisnikId", korisnikId);
+
+                int lastInsertedRowId = Convert.ToInt32(commandInsert.ExecuteScalar());
+                return lastInsertedRowId;
+            }
+            catch (SqliteException ex)
+            {
+                Console.WriteLine($"Greška pri konekciji ili izvršavanju neispravnih SQL upita: {ex.Message}");
+                throw;
+            }
+            catch (FormatException ex)
+            {
+                Console.WriteLine($"Greška u konverziji podataka iz baze: {ex.Message}");
+                throw;
+            }
+            catch (InvalidOperationException ex)
+            {
+                Console.WriteLine($"Konekcija nije otvorena ili je otvorena više puta: {ex.Message}");
+                throw;
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Neočekivana greška: {ex.Message}");
+                throw;
+            }
+        }
     }
 }
