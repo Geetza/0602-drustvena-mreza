@@ -12,9 +12,6 @@ namespace _0601DrustvenaMreza.Controller
     [ApiController]
     public class KorisnikController : ControllerBase
     {
-        private GrupaRepo grupaRepo = new GrupaRepo();
-        private KorisnikRepo korisnikRepo = new KorisnikRepo();
-
         private KorisnikDbRepo korisnikDbRepo;
 
         public KorisnikController(IConfiguration configuration)
