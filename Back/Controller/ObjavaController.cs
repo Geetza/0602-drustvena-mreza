@@ -51,5 +51,24 @@ namespace _0601DrustvenaMreza.Controller
                 return Problem($"Doslo je do greske: {ex.Message}");
             }
         }
+
+        [HttpDelete("objave/{id}")]
+        public ActionResult Delete(int id)
+        {
+            try
+            {
+                bool obrisano = objavaDBRepo.Delete(id);
+                if (!obrisano)
+                {
+                    return NotFound($"Objava sa ID-em {id} nije pronađena.");
+                }
+
+                return NoContent();
+            }
+            catch (Exception ex)
+            {
+                return Problem($"Doslo je do greske: {ex.Message}");
+            }
+        }
     }
 }
