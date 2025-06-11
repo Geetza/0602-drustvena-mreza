@@ -30,6 +30,26 @@ namespace _0601DrustvenaMreza.Controller
             {
                 return Problem($"Doslo je do greske: {ex.Message}");
             }
-        }   
+        }
+
+        [HttpPost("korisnici/{korisnikId}/objave")]
+        public ActionResult<Objava> Create(int korisnikId, [FromBody] Objava objava)
+        {
+            Korisnik korisnik = korisnikDbRepo.GetById(korisnikId);
+            if (korisnik == null)
+            {
+                return NotFound($"Korisnik sa ID-em : {korisnikId} nije pronađen.");
+            }
+            objava.Korisnik = korisnik;
+            try
+            {
+                Objava kreiranaObjava = objavaDBRepo.Create(objava);
+                return Ok(kreiranaObjava);
+            }
+            catch (Exception ex)
+            {
+                return Problem($"Doslo je do greske: {ex.Message}");
+            }
+        }
     }
 }

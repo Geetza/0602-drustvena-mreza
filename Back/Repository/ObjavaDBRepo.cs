@@ -1,4 +1,5 @@
 ﻿using System.Globalization;
+using System.Text.RegularExpressions;
 using _0601DrustvenaMreza.Model;
 using Microsoft.Data.Sqlite;
 
@@ -98,6 +99,44 @@ namespace _0601DrustvenaMreza.Repository
             }
 
             
+        }
+
+        public Objava Create(Objava objava)
+        {
+            try
+            {
+                using SqliteConnection connection = new SqliteConnection(connectionString);
+                connection.Open();
+
+                string query = "INSERT INTO Objave (KorisnikId, Sadrzaj, Datum)  VALUES (@KorisnikId, @Sadrzaj, @Datum); SELECT LAST_INSERT_ROWID();";
+                using SqliteCommand command = new SqliteCommand(query, connection);
+                command.Parameters.AddWithValue("@KorisnikId", objava.Korisnik.Id);
+                command.Parameters.AddWithValue("@Sadrzaj", objava.Sadrzaj);
+                command.Parameters.AddWithValue("@Datum", objava.Datum.ToString("yyyy-MM-dd"));
+
+                objava.Id = Convert.ToInt32(command.ExecuteScalar());
+                return objava;
+            }
+            catch (SqliteException ex)
+            {
+                Console.WriteLine($"Greška pri konekciji ili izvršavanju neispravnih SQL upita: {ex.Message}");
+                throw;
+            }
+            catch (FormatException ex)
+            {
+                Console.WriteLine($"Greška u konverziji podataka iz baze: {ex.Message}");
+                throw;
+            }
+            catch (InvalidOperationException ex)
+            {
+                Console.WriteLine($"Konekcija nije otvorena ili je otvorena više puta: {ex.Message}");
+                throw;
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Neočekivana greška: {ex.Message}");
+                throw;
+            }
         }
     }
 }
