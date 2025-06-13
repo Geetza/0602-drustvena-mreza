@@ -63,7 +63,7 @@ namespace _0601DrustvenaMreza.Repository
                         string datumRodjenjaString = reader["DatumRodjenja"].ToString();
                         DateTime datumRodjenja = DateTime.ParseExact(datumRodjenjaString, "yyyy-MM-dd", CultureInfo.InvariantCulture);
                         Korisnik korisnik = new Korisnik(idKorisnika, korIme, ime, prezime, datumRodjenja);
-                        currentGrupa.korisnici.Add(korisnik);
+                        currentGrupa.Korisnici.Add(korisnik);
                     }
                 }
 

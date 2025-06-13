@@ -13,6 +13,7 @@
         public int Id { get => id; set => id = value; }
         public string Ime { get => ime; set => ime = value; }
         public DateTime DatumOsnivanja { get => datumOsnivanja; set => datumOsnivanja = value; }
+        public List<Korisnik> Korisnici { get; set; } = new List<Korisnik>();
 
         public Grupa(int id, string ime, DateTime datumOsnivanja)
         {

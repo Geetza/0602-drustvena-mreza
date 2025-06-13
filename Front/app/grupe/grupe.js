@@ -15,7 +15,7 @@ function getGrupe() {
       }
       return response.json();
     })
-    .then((grupe) => prikaziGrupe(grupe))
+    .then((grupe) => prikaziGrupe(grupe)) //.then((responseData) => prikaziGrupe(responseData.data))
     .catch((error) => {
       console.error("Error: " + error.message);
 
